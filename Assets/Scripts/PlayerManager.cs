@@ -6,7 +6,6 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
     public GameObject PlayerBody, PlayerHead, PlayerAll;
-    private bool isW, isD, isA, isS;
     private float NowSpeed=0;
     public float MaxSpeed,DeltaSpeed,d_DeltaSpeed;
     // Start is called before the first frame update
