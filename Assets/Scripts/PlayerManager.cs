@@ -5,10 +5,9 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
-    public GameObject PlayerBody, PlayerHead, PlayerAll;
-    private float NowSpeed=0;
-    public float MaxSpeed,DeltaSpeed,d_DeltaSpeed;
-    // Start is called before the first frame update
+    public GameObject PlayerBody, PlayerHead;
+    public Rigidbody2D HeadRB, BodyRB;
+    public float ShootTime,ShootCD;
     private void Awake()
     {
         if (instance == null)
@@ -26,24 +25,30 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-        PlayerBody = GameObject.Find("PlayerBody");
         PlayerHead = GameObject.Find("PlayerHead");
-        PlayerAll = GameObject.Find("PlayerAll");
+        HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
     }
     // Update is called once per frame
     void Update()
     {
-
-    }
-    private void Move()
-    {
-        if(NowSpeed<=MaxSpeed)
+        if (Input.GetKey(KeyCode.F)&&ShootTime==0)
         {
-            NowSpeed += DeltaSpeed;
+            ShootHead();
         }
+        ShootTime -= Time.deltaTime;
     }
-    private void ShootUp()
+    private void ShootHead()
     {
-
+        if (PlayerBody == null)
+        {
+            BodyRB=PlayerBody.GetComponent<Rigidbody2D>();
+            //—∞’“…ÌÃÂ
+        }
+        else
+        {
+            PlayerBody = null;
+            ShootTime = ShootCD;
+            //µØ…‰
+        }
     }
 }
