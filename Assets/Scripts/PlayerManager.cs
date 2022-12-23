@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
+    private bool IsGetPlayer = false;
+    public static int CharacterNumber = 0;
     public GameObject PlayerBody, PlayerHead;
     public Rigidbody2D HeadRB, BodyRB;
-    public float ShootTime,ShootCD;
+    public float ShootTime, ShootCD;
     private void Awake()
     {
         if (instance == null)
@@ -25,23 +27,40 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-        PlayerHead = GameObject.Find("PlayerHead");
-        HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
+
     }
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.F)&&ShootTime==0)
+        if (CharacterNumber != 0)
         {
-            ShootHead();
+            if (!IsGetPlayer)
+            {
+                PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
+                HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
+                IsGetPlayer = true;
+            }
+            if (Input.GetKey(KeyCode.F) && ShootTime == 0)
+            {
+                ShootHead();
+            }
+            ShootTime -= Time.deltaTime;
+            Move();
+            if(Input.GetKey(KeyCode.U))
+            {
+                OriginalSkill();
+            }
+            if(Input.GetKey(KeyCode.J))
+            {
+                Attack();
+            }
         }
-        ShootTime -= Time.deltaTime;
     }
     private void ShootHead()
     {
         if (PlayerBody == null)
         {
-            BodyRB=PlayerBody.GetComponent<Rigidbody2D>();
+            BodyRB = PlayerBody.GetComponent<Rigidbody2D>();
             //—∞’“…ÌÃÂ
         }
         else
@@ -50,5 +69,28 @@ public class PlayerManager : MonoBehaviour
             ShootTime = ShootCD;
             //µØ…‰
         }
+    }
+    private void Move()
+    {
+
+    }
+    private void OriginalSkill()
+    {
+        if (CharacterNumber == 1)
+        {
+
+        }
+        else if (CharacterNumber == 2)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+    private void Attack()
+    {
+
     }
 }
