@@ -5,11 +5,13 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
-    private bool IsGetPlayer = false;
-    public static int CharacterNumber = 0;
+    private bool IsHead = true;
+    public static float San = 100, Health = 100;
+    public float Speed;
+    public static int CharacterNumber = 0;//角色参数
     public GameObject PlayerBody, PlayerHead;
     public Rigidbody2D HeadRB, BodyRB;
-    public float ShootTime, ShootCD;
+    public float ShootTime, ShootCD;//头部弹射CD
     private void Awake()
     {
         if (instance == null)
@@ -27,47 +29,48 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-
+        PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
+        HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
+        Speed = 1;
     }
     // Update is called once per frame
     void Update()
     {
-        if (CharacterNumber != 0)
+        Move();
+        if(ShootTime>=0)
         {
-            if (!IsGetPlayer)
-            {
-                PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
-                HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
-                IsGetPlayer = true;
-            }
-            if (Input.GetKey(KeyCode.F) && ShootTime == 0)
-            {
-                ShootHead();
-            }
             ShootTime -= Time.deltaTime;
-            Move();
-            if(Input.GetKey(KeyCode.U))
-            {
-                OriginalSkill();
-            }
-            if(Input.GetKey(KeyCode.J))
-            {
-                Attack();
-            }
+        }
+        if (IsHead)
+        {
+            San -= 0.5f*Time.deltaTime;
+        }
+        else
+        {
+            San += 0.1f*Time.deltaTime;
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            HeadShot();
         }
     }
-    private void ShootHead()
+    private void HeadShot()
     {
         if (PlayerBody == null)
         {
             BodyRB = PlayerBody.GetComponent<Rigidbody2D>();
             //寻找身体
+            if (PlayerBody != null)
+            {
+                IsHead = false;
+            }
         }
         else
         {
             PlayerBody = null;
             ShootTime = ShootCD;
             //弹射
+            IsHead = true;
         }
     }
     private void Move()
@@ -92,5 +95,11 @@ public class PlayerManager : MonoBehaviour
     private void Attack()
     {
 
+    }
+    /*Damage应用方法：Damage(10);
+     10表示为伤害量*/
+    public void Damage(float damage)
+    {
+        Health -= damage;
     }
 }
