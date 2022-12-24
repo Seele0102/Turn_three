@@ -1,0 +1,4 @@
+repository "Turn_three@magosogold@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
