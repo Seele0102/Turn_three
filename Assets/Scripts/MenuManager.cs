@@ -15,7 +15,22 @@ public class MenuManager : MonoBehaviour
     public Toggle[] resolutionToggles;
     int activeScreenIndex;
     public int[] screenWidths;
+    public Toggle fullscreenToggle;
 
+    public Slider[] volumeSlider;
+
+    private void Start()
+    {
+        volumeSlider[0].value = AudioManager.Instance.masterVolumePercent;
+        volumeSlider[1].value = AudioManager.Instance.musicVolumePercent;
+        volumeSlider[2].value = AudioManager.Instance.sfxVolumePercent;
+        for(int i = 0; i < resolutionToggles.Length; i++)
+        {
+            resolutionToggles[i].isOn = i == activeScreenIndex;
+        }
+        bool isFullscreen = (PlayerPrefs.GetInt("fullscreen")==1)?true:false;
+        fullscreenToggle.isOn = isFullscreen;
+    }
 
     //开始按钮,出现开始游戏和继续游戏
     public void StartButton()
@@ -52,6 +67,8 @@ public class MenuManager : MonoBehaviour
             activeScreenIndex = i;
             float aspectRatio = 16 / 9f;
             Screen.SetResolution(screenWidths[i], (int)(screenWidths[i]/aspectRatio),false);
+            PlayerPrefs.SetInt("screen res index",activeScreenIndex);
+            PlayerPrefs.Save();
         }
     }
 
@@ -67,6 +84,8 @@ public class MenuManager : MonoBehaviour
             Resolution[] allResolutions = Screen.resolutions;
             Resolution maxResolutions = allResolutions[allResolutions.Length-1];
             Screen.SetResolution(maxResolutions.width, maxResolutions.height, true);
+            PlayerPrefs.SetInt("fullscreen", (isFullscreen) ? 1 : 0);
+            PlayerPrefs.Save();
         }
         else
         {
@@ -74,4 +93,18 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    public void SetMasterVolume(float value)
+    {
+        AudioManager.Instance.SetVolume(value, AudioManager.AudioChannel.Master);
+    }
+
+    public void SetMusicVolume(float value)
+    {
+        AudioManager.Instance.SetVolume(value, AudioManager.AudioChannel.Music);
+    }
+
+    public void SetSfxVolume(float value)
+    {
+        AudioManager.Instance.SetVolume(value, AudioManager.AudioChannel.sfx);
+    }
 }
