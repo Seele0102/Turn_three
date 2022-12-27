@@ -39,6 +39,16 @@ public class MenuManager : MonoBehaviour
         startMenu.SetActive(true);
     }
 
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Game");
+    }
+
+    public void ContinueGame()
+    {
+        SceneManager.LoadScene("不知道捏");
+    }
+
     //打开设置界面
     public void OptionButton()
     {
@@ -46,11 +56,23 @@ public class MenuManager : MonoBehaviour
         optionMenu.SetActive(true);
     }
 
+    public void OptionToMainMenu()
+    {
+        optionMenu.SetActive(false);
+        mainMenu.SetActive(true) ;
+    }
+
     //图鉴界面
     public void CollectionButton()
     {
         mainMenu.SetActive(false);
         collectionMenu.SetActive(true);
+    }
+
+    public void CollectionToMainMenu()
+    {
+        collectionMenu.SetActive(false);
+        mainMenu.SetActive(true);
     }
 
     //退出
