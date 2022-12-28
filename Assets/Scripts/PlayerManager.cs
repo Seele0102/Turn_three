@@ -75,7 +75,22 @@ public class PlayerManager : MonoBehaviour
     }
     private void Move()
     {
+        if (Input.GetKey(KeyCode.A))
+        {
 
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+
+        }
     }
     private void OriginalSkill()
     {
