@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour
     public bool IsA, IsW, IsS, IsD;
     public static float San = 100, Health = 100;
     public static int CharacterNumber = 0;//角色参数
-    public GameObject PlayerBody, PlayerHead, Player;
+    public GameObject PlayerBody, PlayerHead, Player,PlayerDirection;
     public Rigidbody2D HeadRB, BodyRB;
     public float ADSpeed, WSSpeed;//横向速度，纵向速度
     public float SprintLength;//位移距离
@@ -36,7 +36,14 @@ public class PlayerManager : MonoBehaviour
         WSSpeed = 0.001f;
         PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
         HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
-        Player = PlayerHead;
+        Player = GameObject.FindGameObjectWithTag("Player");
+        PlayerDirection = GameObject.FindGameObjectWithTag("Direction");
+        PlayerHead.transform.parent = Player.transform;
+        PlayerHead.transform.localPosition= Vector3.zero;
+        PlayerHead.transform.localRotation = Quaternion.identity;
+        PlayerDirection.transform.parent= Player.transform;
+        PlayerDirection.transform.localPosition= Vector3.zero;
+        PlayerDirection.transform.localRotation=Quaternion.identity;
     }
     // Update is called once per frame
     void Update()
@@ -75,41 +82,10 @@ public class PlayerManager : MonoBehaviour
     //WASD移动
     private void Move()
     {
-        if (Input.GetKey(KeyCode.A))
+        
+        if(Input.GetKey(KeyCode.A))
         {
-            Player.transform.position -= new Vector3(ADSpeed, 0, 0);
-            IsA=true;
-        }
-        else
-        {
-            IsA=false;
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            Player.transform.position += new Vector3(0, WSSpeed, 0);
-            IsW=true;
-        }
-        else
-        {
-            IsW=false;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            Player.transform.position -= new Vector3(0, WSSpeed, 0);
-            IsS=true;
-        }
-        else
-        {
-            IsS=false;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            Player.transform.position += new Vector3(ADSpeed, 0, 0);
-            IsD=true;
-        }
-        else
-        {
-            IsD = false;
+
         }
     }
     //K冲刺

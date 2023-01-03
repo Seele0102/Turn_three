@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerHead
   - PlayerBody
+  - Direction
   layers:
   - Default
   - TransparentFX
