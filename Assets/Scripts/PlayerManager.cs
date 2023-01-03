@@ -9,12 +9,17 @@ public class PlayerManager : MonoBehaviour
     private bool IsHead = true;
     public static float San = 100, Health = 100;
     public static int CharacterNumber = 0;//角色参数
-    public GameObject PlayerBody, PlayerHead, Player,PlayerDirection;
+    public GameObject PlayerBody, PlayerHead, Player;
     public Rigidbody2D HeadRB, BodyRB;
-    public float Speed;//速度
-    public float SprintLength;//位移距离
+    public static float Speed;//速度
+    public static float SprintLength=1;//位移距离
     public float ShootTime = 5, ShootMax = 5;
     public float SprintTime=1.5f,SprintMax=1.5f;//头部弹射CD，冲刺CD
+    public float H, V;
+    private Vector3 move;
+    private Vector3 Derection;//指向方向
+    private Vector3 test;
+    private float angle;
     private void Awake()
     {
         if (instance == null)
@@ -36,13 +41,9 @@ public class PlayerManager : MonoBehaviour
         PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
         HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
         Player = GameObject.FindGameObjectWithTag("Player");
-        PlayerDirection = GameObject.FindGameObjectWithTag("Direction");
         PlayerHead.transform.parent = Player.transform;
-        PlayerHead.transform.localPosition= Vector3.zero;
+        PlayerHead.transform.localPosition= Vector3.zero; 
         PlayerHead.transform.localRotation = Quaternion.identity;
-        PlayerDirection.transform.parent= Player.transform;
-        PlayerDirection.transform.localPosition= Vector3.zero;
-        PlayerDirection.transform.localRotation=Quaternion.identity;
     }
     // Update is called once per frame
     void Update()
@@ -58,6 +59,7 @@ public class PlayerManager : MonoBehaviour
         {
             Attack();
         }
+
     }
     private void HeadShot()
     {
@@ -81,17 +83,35 @@ public class PlayerManager : MonoBehaviour
     //WASD移动
     private void Move()
     {
-        if (Input.GetKey(KeyCode.W))
+        H = Input.GetAxisRaw("Horizontal");
+        V = Input.GetAxisRaw("Vertical");
+        if (H != 0 || V != 0)
         {
-
+            move.x = H*Speed;
+            move.y = V*Speed;
+            Player.transform.position += move;
+            test.x = H;
+            test.y = V;
+            if(V>=0)
+            {
+                angle= Vector3.Angle(new Vector3(1,0,0),test);
+            }
+            else
+            {
+                angle = 360f-Vector3.Angle(new Vector3(1, 0, 0), test);
+            }
+            angle = 2 * angle * math.PI / 360f;
         }
     }
     //K冲刺
+    //Done
     private void Sprint()
     {
         if (Input.GetKeyDown(KeyCode.K)&&SprintTime>SprintMax)
         {
-            Player.transform.position += new Vector3(math.cos(PlayerDirection.transform.rotation.z)*SprintLength, math.cos(PlayerDirection.transform.rotation.z)*SprintLength, 0);
+            Derection.x = math.cos(angle) * SprintLength;
+            Derection.y = math.sin(angle) * SprintLength;
+            Player.transform.position += Derection;
             SprintTime = 0;
         }
     }
