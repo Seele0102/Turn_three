@@ -1,17 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
     private bool IsHead = true;
-    public bool IsA, IsW, IsS, IsD;
     public static float San = 100, Health = 100;
     public static int CharacterNumber = 0;//角色参数
     public GameObject PlayerBody, PlayerHead, Player,PlayerDirection;
     public Rigidbody2D HeadRB, BodyRB;
-    public float ADSpeed, WSSpeed;//横向速度，纵向速度
+    public float Speed;//速度
     public float SprintLength;//位移距离
     public float ShootTime = 5, ShootMax = 5;
     public float SprintTime=1.5f,SprintMax=1.5f;//头部弹射CD，冲刺CD
@@ -32,8 +32,7 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-        ADSpeed = 0.002f;
-        WSSpeed = 0.001f;
+        Speed = 0.002f;
         PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
         HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -82,8 +81,7 @@ public class PlayerManager : MonoBehaviour
     //WASD移动
     private void Move()
     {
-        
-        if(Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.W))
         {
 
         }
@@ -93,7 +91,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K)&&SprintTime>SprintMax)
         {
-            //向当前方向冲刺
+            Player.transform.position += new Vector3(math.cos(PlayerDirection.transform.rotation.z)*SprintLength, math.cos(PlayerDirection.transform.rotation.z)*SprintLength, 0);
             SprintTime = 0;
         }
     }
