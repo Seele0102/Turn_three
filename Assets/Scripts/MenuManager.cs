@@ -39,9 +39,16 @@ public class MenuManager : MonoBehaviour
         startMenu.SetActive(true);
     }
 
+    //返回开始界面
+    public void StartToMainButton()
+    {
+        startMenu.SetActive(false);
+        mainMenu.SetActive(true);
+    }
+
     public void StartGame()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("MainGame");
     }
 
     public void ContinueGame()
