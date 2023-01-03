@@ -6,11 +6,15 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
     private bool IsHead = true;
+    public bool IsA, IsW, IsS, IsD;
     public static float San = 100, Health = 100;
     public static int CharacterNumber = 0;//角色参数
     public GameObject PlayerBody, PlayerHead, Player;
     public Rigidbody2D HeadRB, BodyRB;
-    public float ShootTime=5, ShootMax=5,SprintTime=2,SprintMax=1.5f,Speed=0.002f;//头部弹射CD，冲刺CD，角色速度
+    public float ADSpeed, WSSpeed;//横向速度，纵向速度
+    public float SprintLength;//位移距离
+    public float ShootTime = 5, ShootMax = 5;
+    public float SprintTime=1.5f,SprintMax=1.5f;//头部弹射CD，冲刺CD
     private void Awake()
     {
         if (instance == null)
@@ -28,6 +32,8 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
+        ADSpeed = 0.002f;
+        WSSpeed = 0.001f;
         PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
         HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
         Player = PlayerHead;
@@ -41,6 +47,10 @@ public class PlayerManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             HeadShot();
+        }
+        if(Input.GetKeyDown(KeyCode.J))
+        {
+            Attack();
         }
     }
     private void HeadShot()
@@ -67,32 +77,48 @@ public class PlayerManager : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A))
         {
-            Player.transform.position -= new Vector3(Speed, 0, 0);
+            Player.transform.position -= new Vector3(ADSpeed, 0, 0);
+            IsA=true;
+        }
+        else
+        {
+            IsA=false;
         }
         if (Input.GetKey(KeyCode.W))
         {
-            Player.transform.position += new Vector3(0, Speed, 0);
+            Player.transform.position += new Vector3(0, WSSpeed, 0);
+            IsW=true;
+        }
+        else
+        {
+            IsW=false;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            Player.transform.position -= new Vector3(0, Speed, 0);
+            Player.transform.position -= new Vector3(0, WSSpeed, 0);
+            IsS=true;
+        }
+        else
+        {
+            IsS=false;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            Player.transform.position += new Vector3(Speed, 0, 0);
+            Player.transform.position += new Vector3(ADSpeed, 0, 0);
+            IsD=true;
         }
-        Speed = 0.002f;
+        else
+        {
+            IsD = false;
+        }
     }
     //K冲刺
     private void Sprint()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K)&&SprintTime>SprintMax)
         {
-            if (SprintTime >= SprintMax)
-            {
-                SprintTime = 0;
-                Speed = 2;
-            }
+            //向当前方向冲刺
+            SprintTime = 0;
         }
     }
     private void OriginalSkill()
