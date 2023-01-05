@@ -6,11 +6,14 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
-    private bool IsHead = true;
-    public static float San = 100, Health = 100;
+    public static bool IsHead;//是否为头部
+    public static float San = 100, Health = 100;//血量与San值
+    public static float MaxHealth = 100;
+    public static float SanDropSpeed = 0.5f,SanRiseSpeed=0.1f;
     public static int CharacterNumber = 0;//角色参数
-    private GameObject PlayerBody, PlayerHead, Player,PlayerRange;
+    private GameObject PlayerBody, PlayerHead, Player;
     public GameObject[] Enemy;
+    public GameObject[] PlayerBodys;
     private Rigidbody2D HeadRB, BodyRB;
     public static float Speed;//速度
     public static float SprintLength=1;//位移距离
@@ -21,7 +24,7 @@ public class PlayerManager : MonoBehaviour
     private Vector3 Derection;//指向方向
     private Vector3 test;
     private float angle;
-    public static int EnemyNumber;
+    public static int EnemyNumber,BodyNum;
     private void Awake()
     {
         if (instance == null)
@@ -46,8 +49,8 @@ public class PlayerManager : MonoBehaviour
         PlayerHead.transform.parent = Player.transform;
         PlayerHead.transform.localPosition= Vector3.zero; 
         PlayerHead.transform.localRotation = Quaternion.identity;
-        PlayerRange = GameObject.FindGameObjectWithTag("Range");
         EnemyNumber = 0;
+        BodyNum = 0;
     }
     // Update is called once per frame
     void Update()
@@ -157,11 +160,11 @@ public class PlayerManager : MonoBehaviour
         }
         if (IsHead)
         {
-            San -= 0.5f * Time.deltaTime;
+            San -= SanDropSpeed * Time.deltaTime;
         }
         else if(San<=100)
         {
-            San += 0.1f * Time.deltaTime;
+            San += SanRiseSpeed * Time.deltaTime;
         }
     }
 }
