@@ -7,6 +7,8 @@ TagManager:
   - PlayerHead
   - PlayerBody
   - Direction
+  - Enemy
+  - Range
   layers:
   - Default
   - TransparentFX

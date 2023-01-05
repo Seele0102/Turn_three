@@ -9,8 +9,9 @@ public class PlayerManager : MonoBehaviour
     private bool IsHead = true;
     public static float San = 100, Health = 100;
     public static int CharacterNumber = 0;//角色参数
-    public GameObject PlayerBody, PlayerHead, Player;
-    public Rigidbody2D HeadRB, BodyRB;
+    private GameObject PlayerBody, PlayerHead, Player,PlayerRange;
+    public GameObject[] Enemy;
+    private Rigidbody2D HeadRB, BodyRB;
     public static float Speed;//速度
     public static float SprintLength=1;//位移距离
     public float ShootTime = 5, ShootMax = 5;
@@ -20,6 +21,7 @@ public class PlayerManager : MonoBehaviour
     private Vector3 Derection;//指向方向
     private Vector3 test;
     private float angle;
+    public static int EnemyNumber;
     private void Awake()
     {
         if (instance == null)
@@ -44,6 +46,8 @@ public class PlayerManager : MonoBehaviour
         PlayerHead.transform.parent = Player.transform;
         PlayerHead.transform.localPosition= Vector3.zero; 
         PlayerHead.transform.localRotation = Quaternion.identity;
+        PlayerRange = GameObject.FindGameObjectWithTag("Range");
+        EnemyNumber = 0;
     }
     // Update is called once per frame
     void Update()
@@ -59,7 +63,6 @@ public class PlayerManager : MonoBehaviour
         {
             Attack();
         }
-
     }
     private void HeadShot()
     {
@@ -81,6 +84,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
     //WASD移动
+    //Done
     private void Move()
     {
         H = Input.GetAxisRaw("Horizontal");
