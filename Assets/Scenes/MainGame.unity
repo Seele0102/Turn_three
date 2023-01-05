@@ -239,8 +239,8 @@ MonoBehaviour:
   PlayerBodys: []
   ShootTime: 5
   ShootMax: 5
-  SprintTime: 2
-  SprintMax: 1.5
+  SprintTime: 1
+  SprintMax: 1
   H: 0
   V: 0
 --- !u!1 &1131812715
