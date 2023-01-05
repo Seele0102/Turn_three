@@ -2,23 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
+    public Image Left, Right;
     public static bool IsHead;//是否为头部
     public static float San = 100, Health = 100;//血量与San值
-    public static float MaxHealth = 100;
-    public static float SanDropSpeed = 0.5f,SanRiseSpeed=0.1f;
+    public static float MaxHealth = 100;//最大血量
+    public static float SanDropSpeed = 0.5f,SanRiseSpeed=0.1f;//San值相关数据
     public static int CharacterNumber = 0;//角色参数
-    private GameObject PlayerBody, PlayerHead, Player;
-    public GameObject[] Enemy;
-    public GameObject[] PlayerBodys;
+    private GameObject PlayerBody, PlayerHead, Player;//角色Object
+    public GameObject[] Enemy;//攻击范围内的敌人
+    public GameObject[] PlayerBodys;//索取范围内的身体
     private Rigidbody2D HeadRB, BodyRB;
     public static float Speed;//速度
     public static float SprintLength=1;//位移距离
     public float ShootTime = 5, ShootMax = 5;
-    public float SprintTime=1.5f,SprintMax=1.5f;//头部弹射CD，冲刺CD
+    public float SprintTime=1,SprintMax=1;//头部弹射CD，冲刺CD
     public float H, V;
     private Vector3 move;
     private Vector3 Derection;//指向方向
@@ -108,6 +110,14 @@ public class PlayerManager : MonoBehaviour
                 angle = 360f-Vector3.Angle(new Vector3(1, 0, 0), test);
             }
             angle = 2 * angle * math.PI / 360f;
+            if(H>0)
+            {
+                
+            }
+            else if (H<0)
+            {
+                
+            }
         }
     }
     //K冲刺
