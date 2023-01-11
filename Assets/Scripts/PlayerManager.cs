@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
-{
+{ 
     public static PlayerManager instance;
     public static bool IsHead;//是否为头部
     public static float San = 100, Health = 100,Endurance=100;//血量与San值
@@ -13,6 +13,7 @@ public class PlayerManager : MonoBehaviour
     public static float SanDropSpeed = 0.5f,SanRiseSpeed=0.1f;//San值相关数据
     public static float EndDropSpeed=20, EndRiseSpeed=2.5f;//体力槽相关数值
     public static int CharacterNumber = 0;//角色参数
+    public static float p_Attack, p_Defense;
     private GameObject PlayerBody, PlayerHead, Player;//角色Object
     public GameObject[] Enemy;//攻击范围内的敌人
     public GameObject[] PlayerBodys;//索取范围内的身体
