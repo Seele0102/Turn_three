@@ -10,15 +10,14 @@ public class PlayerInfo
     public float p_health, p_endurance, p_san;//当前生命，当前体力，当前san
     public float p_sandrop, p_sanrise, p_enddrop, p_endrise;//san上升、下降，耐力上升、下降
     public float p_orispeed, p_runspeed, p_sprintL;
-    public bool Calthrop;
+    public bool Calthrop;//角色属性，正为棘刺，负为凯露
 }
+
 public class PlayerManager : MonoBehaviour
 { 
     public static PlayerManager instance;
     public static bool IsHead;//是否为头部
     public static PlayerInfo playerinfo;
-    public static float SanDropSpeed = 0.5f,SanRiseSpeed=0.1f;//San值相关数据
-    public static float EndDropSpeed=20, EndRiseSpeed=2.5f;//体力槽相关数值
     private GameObject PlayerBody, PlayerHead, Player;//角色Object
     public GameObject[] Enemy;//攻击范围内的敌人
     public GameObject[] PlayerBodys;//索取范围内的身体
@@ -35,8 +34,6 @@ public class PlayerManager : MonoBehaviour
     public static int EnemyNumber,BodyNum;
     private Quaternion Turn;//Player偏转
     private bool FailToRun;
-
-
     private void Awake()
     {
         if (instance == null)
@@ -54,6 +51,7 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
+        GameStart(playerinfo);
         PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
         HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -205,7 +203,7 @@ public class PlayerManager : MonoBehaviour
         }
         else if(playerinfo.p_san<100)
         {
-            playerinfo.p_san += SanRiseSpeed * Time.deltaTime;
+            playerinfo.p_san += playerinfo.p_sanrise * Time.deltaTime;
             playerinfo.p_sandrop = 0;
         }
         if(playerinfo.p_endurance<=0)
@@ -218,11 +216,15 @@ public class PlayerManager : MonoBehaviour
         }
         if(Input.GetKey(KeyCode.L)&&!FailToRun)
         {
-            playerinfo.p_endurance -= EndDropSpeed* Time.deltaTime;
+            playerinfo.p_endurance -= playerinfo.p_enddrop* Time.deltaTime;
         }
         else
         {
-            playerinfo.p_endurance += EndRiseSpeed*Time.deltaTime;
+            playerinfo.p_endurance += playerinfo.p_enddrop*Time.deltaTime;
         }
+    }
+    private void GameStart(PlayerInfo p)
+    {
+        p.p_health = 100;
     }
 }
