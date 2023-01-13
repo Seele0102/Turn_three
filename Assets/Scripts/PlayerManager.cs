@@ -4,16 +4,21 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class PlayerInfo
+{
+    public float p_attack,p_defense,p_maxhealth,p_maxsan;//攻击力，防御力，最大生命，最大san
+    public float p_health, p_endurance, p_san;//当前生命，当前体力，当前san
+    public float p_sandrop, p_sanrise, p_enddrop, p_endrise;//san上升、下降，耐力上升、下降
+    public float p_orispeed, p_runspeed, p_sprintL;
+    public bool Calthrop;
+}
 public class PlayerManager : MonoBehaviour
 { 
     public static PlayerManager instance;
     public static bool IsHead;//是否为头部
-    public static float San = 100, Health = 100,Endurance=100;//血量与San值
-    public static float MaxHealth = 100,MaxEnd=100;//最大血量
+    public static PlayerInfo playerinfo;
     public static float SanDropSpeed = 0.5f,SanRiseSpeed=0.1f;//San值相关数据
     public static float EndDropSpeed=20, EndRiseSpeed=2.5f;//体力槽相关数值
-    public static int CharacterNumber = 0;//角色参数
-    public static float p_Attack, p_Defense;
     private GameObject PlayerBody, PlayerHead, Player;//角色Object
     public GameObject[] Enemy;//攻击范围内的敌人
     public GameObject[] PlayerBodys;//索取范围内的身体
@@ -30,6 +35,8 @@ public class PlayerManager : MonoBehaviour
     public static int EnemyNumber,BodyNum;
     private Quaternion Turn;//Player偏转
     private bool FailToRun;
+
+
     private void Awake()
     {
         if (instance == null)
@@ -151,11 +158,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void OriginalSkill()
     {
-        if (CharacterNumber == 1)
-        {
-
-        }
-        else if (CharacterNumber == 2)
+        if(playerinfo.Calthrop)
         {
 
         }
@@ -166,20 +169,20 @@ public class PlayerManager : MonoBehaviour
     }
     private void Attack()
     {
-        switch (CharacterNumber)
+        if(playerinfo.Calthrop)
         {
-            case 1:
 
-            case 2:
-            case 3:
-            default:break;
+        }
+        else
+        {
+
         }
     }
     /*Damage应用方法：Damage(10);
      10表示为伤害量*/
     public void Damage(float damage)
     {
-        Health -= damage;
+        playerinfo.p_health -= damage;
     }
     //准备阶段各项属性的变化
     private void Prepare()
@@ -194,27 +197,32 @@ public class PlayerManager : MonoBehaviour
         }
         if (IsHead)
         {
-            San -= SanDropSpeed * Time.deltaTime;
+            if(playerinfo.p_sandrop<5)
+            {
+                playerinfo.p_sandrop += 0.25f*Time.deltaTime;
+            }
+            playerinfo.p_san -= playerinfo.p_sandrop;
         }
-        else if(San<=100)
+        else if(playerinfo.p_san<100)
         {
-            San += SanRiseSpeed * Time.deltaTime;
+            playerinfo.p_san += SanRiseSpeed * Time.deltaTime;
+            playerinfo.p_sandrop = 0;
         }
-        if(Endurance<=0)
+        if(playerinfo.p_endurance<=0)
         {
             FailToRun = true;
         }
-        if(Endurance>=MaxEnd&&FailToRun)
+        if(playerinfo.p_endurance >=100&&FailToRun)
         {
             FailToRun = false;
         }
         if(Input.GetKey(KeyCode.L)&&!FailToRun)
         {
-            Endurance-= EndDropSpeed* Time.deltaTime;
+            playerinfo.p_endurance -= EndDropSpeed* Time.deltaTime;
         }
         else
         {
-            Endurance += EndRiseSpeed*Time.deltaTime;
+            playerinfo.p_endurance += EndRiseSpeed*Time.deltaTime;
         }
     }
 }
