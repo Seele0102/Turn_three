@@ -47,7 +47,6 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-        Speed = 0.002f;
         PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
         HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
         Player = GameObject.FindGameObjectWithTag("Player");
