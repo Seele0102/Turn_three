@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class UImanager : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;  
+    public GameObject settingMenuUI;
     // Update is called once per frame
     void Update()
     {
@@ -21,26 +21,35 @@ public class UImanager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(GameIsPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
+           Pause();
         }
     }
-    void Resume()
+    public void Resume()
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
-        GameIsPaused = false;
     }
     void Pause()
     {
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0;
-        GameIsPaused = true;
+    }
+    public void Remake()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
+    }
+    public void Setting()
+    {
+        settingMenuUI.SetActive(true);
+        pauseMenuUI.SetActive(false);
+    }
+    public void OnExitGame()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 }
