@@ -51,7 +51,7 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-        GameStart(playerinfo);
+        //GameStart(playerinfo);
         PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
         HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -62,7 +62,6 @@ public class PlayerManager : MonoBehaviour
         BodyNum = 0;
         FailToRun= false;
     }
-    // Update is called once per frame
     void Update()
     {
         Prepare();
@@ -201,7 +200,7 @@ public class PlayerManager : MonoBehaviour
             }
             playerinfo.p_san -= playerinfo.p_sandrop;
         }
-        else if(playerinfo.p_san<100)
+        /*else if(playerinfo.p_san<100)
         {
             playerinfo.p_san += playerinfo.p_sanrise * Time.deltaTime;
             playerinfo.p_sandrop = 0;
@@ -221,7 +220,7 @@ public class PlayerManager : MonoBehaviour
         else
         {
             playerinfo.p_endurance += playerinfo.p_enddrop*Time.deltaTime;
-        }
+        }*/
     }
     private void GameStart(PlayerInfo p)
     {
