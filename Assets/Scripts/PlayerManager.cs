@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Windows;
 
 public class PlayerInfo
 {
@@ -35,6 +34,8 @@ public class PlayerManager : MonoBehaviour
     public static int EnemyNumber,BodyNum;
     private Quaternion Turn;//Playerƫת
     private bool FailToRun;
+
+
     private void Awake()
     {
         if (instance == null)
@@ -80,6 +81,7 @@ public class PlayerManager : MonoBehaviour
         {
             OriginalSkill();
         }
+
     }
     private void HeadShot()
     {

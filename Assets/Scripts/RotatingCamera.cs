@@ -6,15 +6,22 @@ public class RotatingCamera : MonoBehaviour
 {
     public float rotateTime = 0.2f;
     private Transform player;
+    private Transform playerHead;
+    private Transform playerBody;
     private bool isRotating = false;
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;//记得在player那边加个tag
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        playerHead = GameObject.FindGameObjectWithTag("PlayerHead").transform;
+        playerBody = GameObject.FindGameObjectWithTag("PlayerBody").transform;
+        //记得在player那边加个tag
     }
 
     private void Update()
     {
         transform.position = player.position;
+        transform.position = playerHead.position;
+        transform.position = playerHead.position;
         Rotate();
     }
 
