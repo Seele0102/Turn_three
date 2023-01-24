@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class PlayerInfo
 {
@@ -103,7 +104,8 @@ public class PlayerManager : MonoBehaviour
     {
         H = Input.GetAxisRaw("Horizontal");
         V = Input.GetAxisRaw("Vertical");
-        if(Input.GetKey(KeyCode.L)&&!FailToRun)
+        Vector2 input = (transform.right * H + transform.up * V).normalized;
+        if (Input.GetKey(KeyCode.L)&&!FailToRun)
         {
             Speed = 0.004f;
             SprintLength = 5;
