@@ -15,9 +15,17 @@ public class UImanager : MonoBehaviour
     public Animator settingAnimator;
     public Animator exitAnimator;
     public Animator optionAnimator;
+    public Text property;
+    public float upSpeed;
+    public float faderSpeed;
+    public float lifeTimer;
 
-
-    void Update()
+    private void Start()
+    {
+        Destroy(gameObject,lifeTimer);
+    }
+    
+    private void Update()
     {
         if (PlayerManager.IsHead)
         {
@@ -32,6 +40,8 @@ public class UImanager : MonoBehaviour
             Debug.Log("°´f");
             Pause();
         }
+        transform.position+=new Vector3(0, upSpeed*Time.deltaTime, 0);
+        Fader();
     }
 
     public void Resume()
@@ -73,7 +83,12 @@ public class UImanager : MonoBehaviour
             Application.Quit();
         #endif
     }
-
-
-
+    public void Fader()
+    {
+        property.color = Color.Lerp(property.color, Color.white, faderSpeed * Time.deltaTime);
+        if(property.color == Color.white)
+        {
+            property.color = Color.Lerp(property.color, Color.clear, faderSpeed * Time.deltaTime);
+        }
+    }
 }
