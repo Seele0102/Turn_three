@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class UImanager : MonoBehaviour
 {
@@ -40,7 +41,7 @@ public class UImanager : MonoBehaviour
             Debug.Log("°´f");
             Pause();
         }
-        transform.position+=new Vector3(0, upSpeed*Time.deltaTime, 0);
+        property.transform.position+=new Vector3(0, upSpeed*Time.deltaTime, 0);
         Fader();
     }
 
