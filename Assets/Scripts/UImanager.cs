@@ -17,13 +17,14 @@ public class UImanager : MonoBehaviour
     public Animator exitAnimator;
     public Animator optionAnimator;
     public Text property;
+    public GameObject Property;
     public float upSpeed;
     public float faderSpeed;
     public float lifeTimer;
 
     private void Start()
     {
-        Destroy(gameObject,lifeTimer);
+        Destroy(Property,lifeTimer);
     }
     
     private void Update()
@@ -41,7 +42,7 @@ public class UImanager : MonoBehaviour
             Debug.Log("°´f");
             Pause();
         }
-        property.transform.position+=new Vector3(0, upSpeed*Time.deltaTime, 0);
+        Property.transform.position+=new Vector3(0, upSpeed*Time.deltaTime, 0);
         Fader();
     }
 
