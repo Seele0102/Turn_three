@@ -4,14 +4,22 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInfo
+public class PlayerInfo/*角色信息*/
 {
-    public float p_attack,p_defense,p_maxhealth,p_maxsan;//攻击力，防御力，最大生命，最大san
-    public float p_health, p_endurance, p_san;//当前生命，当前体力，当前san
-    public float p_sandrop, p_sanrise, p_enddrop, p_endrise;//san上升、下降，耐力上升、下降
-    public float p_orispeed, p_runspeed, p_sprintL;
-    public bool Calthrop;//角色属性，正为棘刺，负为凯露
+    public int playerNumber;//判断当前角色
+    public bool isHead;//判断现阶段状态
+    public int level;//等级
+    public float experence;//经验值
+    public float health,healthMax,healthDropRelief;//生命，最大生命，伤害减免
+    public float san, sanMax,sanMaxDrop,sanRise;//san，最大san，最大san下降
+    public float relief;//闪避
+    public float defense;//防御
+    public float attack,attackStrengthDrop,attackHit;//攻击力，攻击所需体力
+    public float speed;//移动速度
+    public float sprintLength,sprintStrengthDrop;//冲刺距离，冲刺所需体力
+    public float strength,strengthMax,strengthDrop,strengthRise;//体力，最大体力，跑动所需体力，静止走动回复
 }
+
 
 public class PlayerManager : MonoBehaviour
 { 
@@ -53,7 +61,7 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-        //GameStart(playerinfo);
+        GameStart(playerinfo);
         PlayerHead = GameObject.FindGameObjectWithTag("PlayerHead");
         HeadRB = PlayerHead.GetComponent<Rigidbody2D>();
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -159,7 +167,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void OriginalSkill()
     {
-        if(playerinfo.Calthrop)
+        if(playerinfo.playerNumber==1)
         {
 
         }
@@ -170,7 +178,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void Attack()
     {
-        if(playerinfo.Calthrop)
+        if(playerinfo.playerNumber == 1)
         {
 
         }
@@ -183,7 +191,7 @@ public class PlayerManager : MonoBehaviour
      10表示为伤害量*/
     public void Damage(float damage)
     {
-        playerinfo.p_health -= damage;
+        playerinfo.health -= damage;
     }
     //准备阶段各项属性的变化
     private void Prepare()
@@ -198,11 +206,11 @@ public class PlayerManager : MonoBehaviour
         }
         if (IsHead)
         {
-            if(playerinfo.p_sandrop<5)
+            if(playerinfo.sanMaxDrop<5)
             {
-                playerinfo.p_sandrop += 0.25f*Time.deltaTime;
+                playerinfo.sanMaxDrop += 0.25f*Time.deltaTime;
             }
-            playerinfo.p_san -= playerinfo.p_sandrop;
+            playerinfo.san -= playerinfo.sanMaxDrop;
         }
         /*else if(playerinfo.p_san<100)
         {
@@ -228,6 +236,20 @@ public class PlayerManager : MonoBehaviour
     }
     private void GameStart(PlayerInfo p)
     {
-        p.p_health = 100;
+        p.isHead = false;
+        p.level = 1;
+        p.experence= 0;
+        p.health =p.healthMax= 100;
+        p.healthDropRelief = 0;
+        p.san = p.sanMax = 100;
     }
 }
+/*
+    public float san, sanMax,sanMaxDrop,sanRise;//san，最大san，最大san下降
+    public float relief;//闪避
+    public float defense;//防御
+    public float attack,attackStrengthDrop,attackHit;//攻击力，攻击所需体力
+    public float speed;//移动速度
+    public float sprintLength,sprintStrengthDrop;//冲刺距离，冲刺所需体力
+    public float strength,strengthMax,strengthDrop,strengthRise;//体力，最大体力，跑动所需体力，静止走动回复
+*/
