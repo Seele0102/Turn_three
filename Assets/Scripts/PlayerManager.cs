@@ -7,17 +7,18 @@ using UnityEngine.UI;
 public class PlayerInfo/*角色信息*/
 {
     public int playerNumber;//判断当前角色
-    public bool isHead;//判断现阶段状态
+    public bool isHead,isTired,isTiring;//判断现阶段状态
     public int level;//等级
     public float experence;//经验值
     public float health,healthMax,healthDropRelief;//生命，最大生命，伤害减免
-    public float san, sanMax,sanMaxDrop,sanRise;//san，最大san，最大san下降
+    public float san, sanMax,sanMaxDrop,sanRise,sanMaxDropTime;//san，最大san，最大san下降
     public float relief;//闪避
     public float defense;//防御
-    public float attack,attackStrengthDrop,attackHit;//攻击力，攻击所需体力
+    public float attack,attackStrengthDrop,attackHit;//攻击力，攻击所需体力,攻击击退力度
     public float speed;//移动速度
-    public float sprintLength,sprintStrengthDrop;//冲刺距离，冲刺所需体力
+    public float sprintLength,sprintStrengthDrop,sprint, sprintMax;//冲刺距离，冲刺所需体力
     public float strength,strengthMax,strengthDrop,strengthRise;//体力，最大体力，跑动所需体力，静止走动回复
+    public float shoot, shootMax;
 }
 
 
@@ -30,8 +31,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject[] Enemy;//攻击范围内的敌人
     public GameObject[] PlayerBodys;//索取范围内的身体
     private Rigidbody2D HeadRB, BodyRB;
-    public static float Speed;//速度
-    public static float SprintLength=2.5f;//位移距离
+    public float sanDropen;
     public float ShootTime = 5, ShootMax = 5;
     public float SprintTime=1,SprintMax=1;//头部弹射CD，冲刺CD
     public float H, V;
@@ -43,7 +43,7 @@ public class PlayerManager : MonoBehaviour
     private Quaternion Turn;//Player偏转
     private bool FailToRun;
 
-
+    //单例
     private void Awake()
     {
         if (instance == null)
@@ -59,6 +59,7 @@ public class PlayerManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
     }
+    //开始重置
     void Start()
     {
         GameStart(playerinfo);
@@ -117,18 +118,18 @@ public class PlayerManager : MonoBehaviour
         Vector2 input = (transform.right * H + transform.up * V).normalized;
         if (Input.GetKey(KeyCode.L)&&!FailToRun)
         {
-            Speed = 0.004f;
-            SprintLength = 5;
+            playerinfo.speed = 0.004f;
+            playerinfo.sprintLength = 5;
         }
         else
         {
-            Speed = 0.002f;
-            SprintLength = 2.5f;
+            playerinfo.speed= 0.002f;
+            playerinfo.sprintLength = 2.5f;
         }
         if (H != 0 || V != 0)
         {
-            move.x = H*Speed;
-            move.y = V*Speed;
+            move.x = H*playerinfo.speed;
+            move.y = V * playerinfo.speed;
             Player.transform.position += move;
             Angle.x = H;
             Angle.y = V;
@@ -159,8 +160,8 @@ public class PlayerManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K)&&SprintTime>SprintMax)
         {
-            Derection.x = math.cos(angle) * SprintLength;
-            Derection.y = math.sin(angle) * SprintLength;
+            Derection.x = math.cos(angle) * playerinfo.sprintLength;
+            Derection.y = math.sin(angle) * playerinfo.sprintLength;
             Player.transform.position += Derection;
             SprintTime = 0;
         }
@@ -196,44 +197,36 @@ public class PlayerManager : MonoBehaviour
     //准备阶段各项属性的变化
     private void Prepare()
     {
-        if (SprintTime <= SprintMax)
+        if(playerinfo.isHead)
         {
-            SprintTime += Time.deltaTime;
-        }
-        if (ShootTime <= ShootMax)
-        {
-            ShootTime += Time.deltaTime;
-        }
-        if (IsHead)
-        {
-            if(playerinfo.sanMaxDrop<5)
+            playerinfo.healthMax=playerinfo.health = 1;
+            if(sanDropen<playerinfo.sanMaxDrop&&playerinfo.san>=0)
             {
-                playerinfo.sanMaxDrop += 0.25f*Time.deltaTime;
+                sanDropen += (playerinfo.sanMax / playerinfo.sanMaxDropTime)*Time.deltaTime;
             }
-            playerinfo.san -= playerinfo.sanMaxDrop;
-        }
-        /*else if(playerinfo.p_san<100)
-        {
-            playerinfo.p_san += playerinfo.p_sanrise * Time.deltaTime;
-            playerinfo.p_sandrop = 0;
-        }
-        if(playerinfo.p_endurance<=0)
-        {
-            FailToRun = true;
-        }
-        if(playerinfo.p_endurance >=100&&FailToRun)
-        {
-            FailToRun = false;
-        }
-        if(Input.GetKey(KeyCode.L)&&!FailToRun)
-        {
-            playerinfo.p_endurance -= playerinfo.p_enddrop* Time.deltaTime;
+            playerinfo.san -= sanDropen*Time.deltaTime;
         }
         else
         {
-            playerinfo.p_endurance += playerinfo.p_enddrop*Time.deltaTime;
-        }*/
+            sanDropen = 0;
+            if(playerinfo.san<playerinfo.sanMax)
+            {
+                playerinfo.san += playerinfo.sanRise*Time.deltaTime;
+            }
+        }
+        if(playerinfo.shoot<playerinfo.shootMax)
+        {
+            ShootMax += Time.deltaTime;
+        }
+
     }
+    /*
+    public float attack, attackStrengthDrop, attackHit;//攻击力，攻击所需体力,攻击击退力度
+    public float speed;//移动速度
+    public float sprintLength, sprintStrengthDrop, sprint, sprintMax;//冲刺距离，冲刺所需体力
+    public float strength, strengthMax, strengthDrop, strengthRise;//体力，最大体力，跑动所需体力，静止走动回复
+    */
+    //游戏初始面板调整
     private void GameStart(PlayerInfo p)
     {
         p.isHead = false;
@@ -242,14 +235,31 @@ public class PlayerManager : MonoBehaviour
         p.health =p.healthMax= 100;
         p.healthDropRelief = 0;
         p.san = p.sanMax = 100;
+        p.sanMaxDrop = 10;
+        p.sanRise = 2;
+        p.sanMaxDropTime = 10;
+        p.relief = 0;
+        p.defense = 10;
+        p.attack = 10;
+        p.attackStrengthDrop = 2;
+        if(p.playerNumber==1)
+        {
+            p.attackHit = 5;
+        }
+        else if(p.playerNumber==2)
+        {
+            p.attackHit = 1;
+        }
+        p.speed = 10;
+        p.sprintLength = 5;
+        p.sprintLength = 10;
+        p.strength = 200;
+        p.strengthMax = 200;
+        p.strengthDrop = 5;
+        p.strengthRise = 10;
+        p.sprint = 1;
+        p.sprintMax = 1;
+        p.shoot = 5;
+        p.shootMax = 5;
     }
 }
-/*
-    public float san, sanMax,sanMaxDrop,sanRise;//san，最大san，最大san下降
-    public float relief;//闪避
-    public float defense;//防御
-    public float attack,attackStrengthDrop,attackHit;//攻击力，攻击所需体力
-    public float speed;//移动速度
-    public float sprintLength,sprintStrengthDrop;//冲刺距离，冲刺所需体力
-    public float strength,strengthMax,strengthDrop,strengthRise;//体力，最大体力，跑动所需体力，静止走动回复
-*/
